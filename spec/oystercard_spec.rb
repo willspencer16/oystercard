@@ -44,7 +44,6 @@ describe Oystercard do
 		end
 
 		it 'an error is thrown if a card with insufficient balance is touched in' do
-		
 			expect{ subject.touch_in }.to raise_error 'Minimum balance needed'
 		end
 	end
@@ -57,6 +56,8 @@ describe Oystercard do
 		it 'when user touches out, in journey changes to false' do
 			subject.top_up(5)
 			subject.touch_in
+			card = Oystercard.new
+
 			expect {subject.touch_out}.to change { subject.in_journey? }.from(true).to(false)
 		end
 	end
