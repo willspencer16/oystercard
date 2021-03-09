@@ -1,7 +1,7 @@
 require './lib/oystercard.rb'
 
 describe Oystercard do
-	it 'new card has a balance' do
+	it 'has a balance' do
 		expect(subject).to respond_to(:balance)
 	end
 
@@ -13,7 +13,7 @@ describe Oystercard do
 		expect(subject).to respond_to(:top_up).with(1).argument
 	end
 
-	it 'balace is changed after top up' do
+	it 'balance is changed after top up' do
 		expect { subject.top_up(1) }.to change { subject.balance }.by(1)
 	end
 
@@ -25,37 +25,34 @@ describe Oystercard do
 
 	it 'responds to deduct method with an argument' do
 		expect(subject).to respond_to(:deduct).with(1).argument
-  	end
+	end
 
 
 	it 'deducts an amount from the balance' do
     	subject.top_up(20)
     	expect{ subject.deduct(3)}.to change{ subject.balance }.by -3
-  end
+    end
 
-	describe '#touch_in' do
-		it 'responds to subject' do
-			expect(subject).to respond_to (:touch_in)
-		end
-
-		it 'when user touches in, in journey changes to true' do
-			expect {subject.touch_in}.to change { subject.in_journey? }.from(nil).to(true)
-		end
-
-		it 'an error is thrown if a card with insufficient balance is touched in' do
-			allow(subject).to receive(:balance) { 0 }
-			expect{ subject.touch_in }.to raise_error 'Minimum balance needed'
-		end
+	it "can touch in" do
+		subject.top_up(5)
+		subject.touch_in
+		expect(subject).to be_in_journey
 	end
 
-	describe '#touch_out' do
-		it 'responds to subject' do
-			expect(subject).to respond_to (:touch_out)
-		end
+	it "can touch out" do
+		subject.top_up(5)
+  		subject.touch_in
+  		subject.touch_out
+  		expect(subject).not_to be_in_journey
+	end
 
-		it 'when user touches out, in journey changes to false' do
-			allow(subject).to receive(:in_journey?) { true }
-			expect {subject.touch_out}.to change { subject.in_journey? }.from(true).to(false)
-		end
+	it 'an error is raised if a card with insufficient balance is touched in' do
+		expect{ subject.touch_in }.to raise_error 'Minimum balance needed'
+	end
+
+	it 'has correct amount deducted, when journey is complete' do
+		subject.top_up(20)
+  		subject.touch_in
+		expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
 	end
 end
