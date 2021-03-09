@@ -1,0 +1,20 @@
+In order to get through the barriers.
+As a customer
+I need to touch in and out.
+
+Write up a plan for how you will interact with your code and manually test in IRB.
+card = Oystercard.new
+card.top_up(10)
+card.touch_in --> signify it's in a journey ---> change in_journey attr - true
+card.touch_out --> signify out of journey  ---> change in_journey to false
+card.in_journey? --> return that it's in journey --> this just returns whether it's  in journey or not
+
+Write tests for in_journey?, touch_in and touch_out
+Write implementation of these methods that will make the tests pass
+Use an instance variable to track whether the card is in use
+Use an RSpec predicate matcher to check if the card is in use
+Use boolean values to store the state of the card
+
+touch_in
+touch_out
+in_journey

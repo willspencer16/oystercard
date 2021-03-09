@@ -27,9 +27,22 @@ describe Oystercard do
 		expect(subject).to respond_to(:deduct).with(1).argument
   	end
 
-  	
+
 	it 'deducts an amount from the balance' do
     	subject.top_up(20)
     	expect{ subject.deduct(3)}.to change{ subject.balance }.by -3
-  	end
+  end
+
+	describe '#touch_in' do
+		it 'responds to subject' do
+			expect(subject).to respond_to (:touch_in)
+		end
+
+		it 'changes in journey to true' do
+			expect {subject.touch_in}.to change {
+				subject.in_journey? }.from(nil).to(true)
+		end
+
+	end
+
 end
