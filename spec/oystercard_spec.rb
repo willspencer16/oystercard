@@ -38,11 +38,24 @@ describe Oystercard do
 			expect(subject).to respond_to (:touch_in)
 		end
 
-		it 'changes in journey to true' do
-			expect {subject.touch_in}.to change {
-				subject.in_journey? }.from(nil).to(true)
+		it 'when user touches in, in journey changes to true' do
+			expect {subject.touch_in}.to change { subject.in_journey? }.from(nil).to(true)
 		end
 
+		it 'an error is thrown if a card with insufficient balance is touched in' do
+			allow(subject).to receive(:balance) { 0 }
+			expect{ subject.touch_in }.to raise_error 'Minimum balance needed'
+		end
 	end
 
+	describe '#touch_out' do
+		it 'responds to subject' do
+			expect(subject).to respond_to (:touch_out)
+		end
+
+		it 'when user touches out, in journey changes to false' do
+			allow(subject).to receive(:in_journey?) { true }
+			expect {subject.touch_out}.to change { subject.in_journey? }.from(true).to(false)
+		end
+	end
 end
