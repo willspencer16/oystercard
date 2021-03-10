@@ -18,9 +18,8 @@ describe Oystercard do
 	end
 
 	it 'raises an error if the maximum balance is exceeded' do
-		maximum_balance = Oystercard::MAXIMUM_BALANCE
-		subject.top_up(maximum_balance)
-		expect{ subject.top_up 1 }.to raise_error 'Maximum balance exceeded'
+		subject.top_up(Oystercard::MAXIMUM_BALANCE)
+		expect{ subject.top_up(1) }.to raise_error 'Maximum balance exceeded'
 	end
 
 	it 'responds to deduct method with an argument' do
@@ -55,4 +54,33 @@ describe Oystercard do
   		subject.touch_in
 		expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
 	end
+
+	it 'knows where user has travelled form' do
+		subject.top_up(20)
+  		subject.touch_in
+  		expect(subject).to respond_to(:entry_station)
+	end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

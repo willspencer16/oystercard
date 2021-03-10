@@ -18,3 +18,13 @@ Use boolean values to store the state of the card
 touch_in
 touch_out
 in_journey
+
+
+
+
+In order to pay for my journey
+As a customer
+I need to know where I've travelled from
+
+card.touch_in --> signify it's in a journey ---> change in_journey attr - true
+card.touch_in --> register where it's been touched in ----> continue run as normal.
