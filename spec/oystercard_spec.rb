@@ -1,6 +1,7 @@
 require './lib/oystercard.rb'
 
 describe Oystercard do
+	let(:station){ double :station }
 	it 'has a balance' do
 		expect(subject).to respond_to(:balance)
 	end
@@ -34,53 +35,30 @@ describe Oystercard do
 
 	it "can touch in" do
 		subject.top_up(5)
-		subject.touch_in
+		subject.touch_in(station)
 		expect(subject).to be_in_journey
 	end
 
 	it "can touch out" do
 		subject.top_up(5)
-  		subject.touch_in
+  		subject.touch_in(station)
   		subject.touch_out
   		expect(subject).not_to be_in_journey
 	end
 
 	it 'an error is raised if a card with insufficient balance is touched in' do
-		expect{ subject.touch_in }.to raise_error 'Minimum balance needed'
+		expect{ subject.touch_in(station) }.to raise_error 'Minimum balance needed'
 	end
 
 	it 'has correct amount deducted, when journey is complete' do
 		subject.top_up(20)
-  		subject.touch_in
+  		subject.touch_in(station)
 		expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
 	end
 
 	it 'knows where user has travelled form' do
 		subject.top_up(20)
-  		subject.touch_in
-  		expect(subject).to respond_to(:entry_station)
+  		subject.touch_in(station)
+		expect(subject.entry_station).to eq station
 	end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
