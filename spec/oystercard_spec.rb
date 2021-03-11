@@ -42,7 +42,7 @@ describe Oystercard do
 	it "can touch out" do
 		subject.top_up(5)
   		subject.touch_in(station)
-  		subject.touch_out
+  		subject.touch_out(station)
   		expect(subject).not_to be_in_journey
 	end
 
@@ -53,7 +53,7 @@ describe Oystercard do
 	it 'has correct amount deducted, when journey is complete' do
 		subject.top_up(20)
   		subject.touch_in(station)
-		expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
+		expect{ subject.touch_out(station) }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
 	end
 
 	it 'knows where user has travelled form' do
@@ -61,4 +61,43 @@ describe Oystercard do
   		subject.touch_in(station)
 		expect(subject.entry_station).to eq station
 	end
+
+	it 'forgets the entry station' do
+		subject.top_up(20)
+  		subject.touch_in(station)
+  		subject.touch_out(station)
+		expect(subject.entry_station).to eq nil
+	end
+
+	it 'has somewhere to store history' do
+		expect(subject.history).to eq([])
+	end
+
+	it 'shows all my previous trips' do
+		subject.top_up(20)
+  		subject.touch_in('Borough')
+  		subject.touch_out('Waterloo')
+		expect(subject.history).to eq([{ :start => 'Borough', :finish => 'Waterloo' }])
+	end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

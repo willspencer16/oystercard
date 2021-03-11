@@ -28,3 +28,13 @@ I need to know where I've travelled from
 
 card.touch_in --> signify it's in a journey ---> change in_journey attr - true
 card.touch_in --> register where it's been touched in ----> continue run as normal.
+
+
+
+In order to know where I have been
+As a customer
+I want to see all my previous trips
+
+card.touch_out(station) --> logs station touching out of --> station >> history
+
+card.history --> list all stations
