@@ -19,13 +19,26 @@ describe Oystercard do
 	end
 
 	it 'responds to deduct method with an argument' do
-		expect(subject).to respond_to(:deduct).with(1).argument
+		expect(subject).to respond_to(:deduct)
 	end
 
-	it 'deducts an amount from the balance' do
-    	subject.top_up(20)
-    	expect{ subject.deduct(3)}.to change{ subject.balance }.by -3
-    end
+	it 'deducts the minimum amount from the balance if the user touches in and out' do
+    subject.top_up(20)
+		subject.touch_in('Leicester Square')
+    expect{ subject.touch_out('Westminister')}.to change{ subject.balance }.by -1
+  end
+
+	it 'deducts the penalty fare from the balance if the user touches in without touching out' do
+		subject.top_up(20)
+		subject.touch_in('Leicester Square')
+		expect{ subject.touch_in('Westminister')}.to change{ subject.balance }.by -6
+	end
+
+	it 'deducts the penalty fare from the balance if the user touches out without touching in' do
+		subject.top_up(20)
+		subject.touch_out('Leicester Square')
+		expect{ subject.touch_out('Westminister')}.to change{ subject.balance }.by -6
+	end
 
 	it 'an error is raised if a card with insufficient balance is touched in' do
 		expect{ subject.touch_in('Waterloo') }.to raise_error 'Minimum balance needed'
@@ -53,7 +66,7 @@ describe Oystercard do
 		card.top_up(20)
 
 		expect(journey_double).to receive(:finish).with('Borough')
-		
+
 		card.touch_out('Borough')
 	end
 end

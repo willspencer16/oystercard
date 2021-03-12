@@ -2,9 +2,10 @@
 class Journey
 	attr_reader :entry_station, :history
 
-	def initialize
+	def initialize(oystercard)
 		@entry_station = nil
 		@history = []
+		@oystercard = oystercard
 	end
 
 	def start(station)
@@ -15,10 +16,5 @@ class Journey
 		@history << { :start => @entry_station, :finish => station }
 		@entry_station = nil
 	end
-
-	def fare
-	end
-
-	def complete?
-	end
+	
 end
